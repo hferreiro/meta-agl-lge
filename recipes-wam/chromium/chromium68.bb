@@ -65,10 +65,16 @@ PACKAGECONFIG[jumbo] = "use_jumbo_build=true jumbo_file_merge_limit=${JUMBO_FILE
 
 PACKAGECONFIG[lttng] = "use_lttng=true,use_lttng=false,lttng-ust,lttng-tools lttng-modules babeltrace"
 
+#custom_toolchain=\"//build/toolchain/linux/unbundle:default\"
+#v8_snapshot_toolchain=\"//build/toolchain/yocto:clang_yocto_native\"
 GN_ARGS = "\
-    custom_toolchain=\"//build/toolchain/linux/unbundle:default\"\
-    host_toolchain=\"//build/toolchain/linux/unbundle:host\"\
-    v8_snapshot_toolchain=\"//build/toolchain/linux/unbundle:host\"\
+    cros_host_ar=\"${BUILD_AR}\"\
+    cros_host_cc=\"${BUILD_CC}\"\
+    cros_host_cxx=\"${BUILD_CXX}\"\
+    cros_host_extra_ldflags=\"${BUILD_LDFLAGS}\"\
+    cros_target_ar=\"${AR}\"\
+    cros_target_cc=\"${CC}\"\
+    cros_target_cxx=\"${CXX}\"\
     enable_memorymanager_webapi=true\
     ffmpeg_branding=\"Chrome\"\
     host_os=\"linux\"\
@@ -95,12 +101,12 @@ GN_ARGS = "\
     ${PACKAGECONFIG_CONFARGS}\
 "
 
-## TODO: drop this after we migrate to ubuntu 16.04 or above
-#GN_ARGS += "\
-#    is_host_clang=true\
-#    host_toolchain=\"//build/toolchain/yocto:clang_yocto_native\" \
-#    fatal_linker_warnings=false\
-#"
+# TODO: drop this after we migrate to ubuntu 16.04 or above
+GN_ARGS += "\
+    is_host_clang=true\
+    host_toolchain=\"//build/toolchain/yocto:clang_yocto_native\" \
+    fatal_linker_warnings=false\
+"
 
 python do_write_toolchain_file () {
     """Writes a BUILD.gn file for Yocto detailing its toolchains."""

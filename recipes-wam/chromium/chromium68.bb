@@ -67,19 +67,11 @@ PACKAGECONFIG[jumbo] = "use_jumbo_build=true jumbo_file_merge_limit=${JUMBO_FILE
 
 PACKAGECONFIG[lttng] = "use_lttng=true,use_lttng=false,lttng-ust,lttng-tools lttng-modules babeltrace"
 
-#custom_toolchain=\"//build/toolchain/linux/unbundle:default\"
 GN_ARGS = "\
-    cros_host_ar=\"${BUILD_AR}\"\
-    cros_host_cc=\"${BUILD_CC}\"\
-    cros_host_cxx=\"${BUILD_CXX}\"\
-    cros_host_extra_ldflags=\"${BUILD_LDFLAGS}\"\
-    cros_target_ar=\"${AR}\"\
-    cros_target_cc=\"${CC}\"\
-    cros_target_cxx=\"${CXX}\"\
+    custom_toolchain=\"//build/toolchain/linux/unbundle:default\"\
     enable_memorymanager_webapi=false\
     ffmpeg_branding=\"Chrome\"\
     host_os=\"linux\"\
-    is_cross_linux_build=true\
     is_clang=false\
     ozone_auto_platforms=false\
     ozone_platform_wayland_external=true\
@@ -106,8 +98,7 @@ GN_ARGS = "\
 # We need this for cross to 32 bit architectures, as we do not have a way
 # to retrieve a host gcc for 32 bits in yocto
 GN_ARGS_TOOLCHAIN = "\
-    is_host_clang=true\
-    host_toolchain=\"//build/toolchain/yocto:clang_yocto_native\" \
+    host_toolchain=\"//build/toolchain/yocto:clang_yocto_native\"\
     fatal_linker_warnings=false\
     use_custom_libcxx_for_host=true\
 "
@@ -115,14 +106,9 @@ GN_ARGS_TOOLCHAIN = "\
 # But for x86-64 previous setting fails in torque, so this makes build use
 # gcc on host, and use host toolchain for v8 snapshot and torque
 GN_ARGS_TOOLCHAIN_x86-64 = "\
-    is_host_clang=false\
     use_custom_libcxx_for_host=false\
-    v8_snapshot_toolchain=\"//build/toolchain/cros:host\" \
-    cros_v8_snapshot_is_clang=false\
-    cros_v8_snapshot_ar=\"${BUILD_AR}\"\
-    cros_v8_snapshot_cc=\"${BUILD_CC}\"\
-    cros_v8_snapshot_cxx=\"${BUILD_CXX}\"\
-    cros_v8_snapshot_extra_ldflags=\"${BUILD_LDFLAGS}\"\
+    host_toolchain=\"//build/toolchain/linux/unbundle:host\"\
+    v8_snapshot_toolchain=\"//build/toolchain/linux/unbundle:host\"\
 "
 
 GN_ARGS += "${GN_ARGS_TOOLCHAIN}"
